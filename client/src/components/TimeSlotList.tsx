@@ -90,6 +90,7 @@ const TimeSlotList: React.FC<TimeSlotListProps> = ({
                       size="small"
                       label="Booked"
                       color="error"
+                      variant="filled"
                       sx={{ ml: 1 }}
                     />
                   )}

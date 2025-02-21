@@ -212,6 +212,14 @@ const SalesManager = () => {
       <Dialog
         open={confirmDialog.open}
         onClose={() => setConfirmDialog({ open: false, slotId: null })}
+        PaperProps={{
+          elevation: 4,
+          sx: {
+            width: '100%',
+            maxWidth: '400px',
+            p: 1
+          }
+        }}
       >
         <DialogTitle>Cancel Appointment</DialogTitle>
         <DialogContent>
@@ -219,17 +227,18 @@ const SalesManager = () => {
             Are you sure you want to cancel this appointment?
           </Typography>
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ px: 3, pb: 3 }}>
           <Button 
             onClick={() => setConfirmDialog({ open: false, slotId: null })}
+            variant="outlined"
             color="inherit"
           >
             No, Keep it
           </Button>
           <Button
             onClick={() => confirmDialog.slotId && handleCancel(confirmDialog.slotId)}
-            color="error"
             variant="contained"
+            color="error"
           >
             Yes, Cancel Appointment
           </Button>
