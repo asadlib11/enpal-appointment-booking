@@ -8,9 +8,9 @@ WORKDIR /app
 COPY package*json tsconfig.json slots-seed.json ./
 COPY src/* ./src/
 
-RUN npm ci && \
+RUN npm ci --legacy-peer-deps && \
     npm run build && \
-    npm prune --production
+    npm prune --production --legacy-peer-deps
 
 FROM base AS runner
 WORKDIR /app
@@ -20,12 +20,11 @@ RUN adduser --system --uid 1001 hono
 
 COPY --from=builder --chown=hono:nodejs /app/node_modules /app/node_modules
 COPY --from=builder --chown=hono:nodejs /app/dist /app/dist
-COPY --from=builder --chown=hono:nodejs /app/package.json /app/package.json
-COPY --from=builder --chown=hono:nodejs /app/slots-seed.json /app/dist/slots-seed.json
+COPY --chown=hono:nodejs slots-seed.json ./
 
-ENV SLOT_SEED_FILE=/app/dist/slots-seed.json
+ENV SLOT_SEED_FILE=/app/slots-seed.json
 
 USER hono
 EXPOSE 3000
 
-CMD ["node", "/app/dist/index.cjs"]
+CMD ["node", "dist/index.cjs"]
