@@ -1,5 +1,6 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { swaggerUI } from '@hono/swagger-ui';
+import { cors } from 'hono/cors';
 import { nanoid } from 'nanoid';
 import fs from 'node:fs';
 
@@ -69,6 +70,17 @@ const seedSlots = () => {
 const slots = seedSlots();
 
 export const app = new OpenAPIHono();
+
+// Add CORS middleware
+app.use('/*', cors({
+  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  exposeHeaders: ['Content-Length', 'X-Requested-With'],
+  maxAge: 3600,
+  credentials: true
+}));
+
 app.use(async (c, next) => {
   if (!c.get('slots')) {
     c.set('slots', new SlotService(slots));
